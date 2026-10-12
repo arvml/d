@@ -1,0 +1,40 @@
+data_matrix <- matrix(c(-0.28, -0.33, -0.19, -0.2, -0.08, 0.06, 0.08, -0.1, 0.09, 0.39, -0.21, -0.33, -0.39, -0.19, -0.19, -0.05, 
+0.06, 0, 0.05, 0.56,-0.26, -0.25, -0.33, -0.14, -0.07, 0, -0.01, 0.14, 0.12, 0.32, -0.27, -0.14, -0.35, -0.26, -0.12, -0.04, 0.07, -
+0.08, 0.26, 0.33,-0.32, -0.11, -0.33, -0.22, -0.05, -0.07, 0.04, -0.05, 0.31, 0.48,-0.32, -0.25, -0.34, -0.22, 0.07, -0.16, 0.08, -
+0.16, 0.19, 0.56, -0.29, -0.15, -0.32, -0.17, 0.1, -0.04, -0.21, 0.12, 0.37, 0.55,-0.36, -0.07, -0.3, -0.02, 0.01, 0.03, -0.11, 0.01, 
+0.35, 0.48, -0.27, -0.14, -0.15, -0.15, 0.04, 0.11, -0.03, 0.08, 0.12, 0.62, -0.17, -0.24, -0.1, -0.12, 0.1, -0.1, -0.01, 0.18, 0.13, 
+0.54,-0.39, -0.3, -0.3, -0.26, 0.03, -0.1, -0.04, 0.26, 0.23, 0.57,-0.27, -0.34, -0.39, -0.08, 0.09, -0.17, 0.08, 0.04, 0.37, 0.43, -
+0.32, -0.24, -0.33, -0.02, 0.19, 0.08, 0.03, 0.26, 0.29, 0.57
+), nrow = 13, byrow = TRUE)
+x <- as.vector(t(data_matrix))
+t <- 1:length(x)
+ts_data <- ts(x)
+# Part (a):
+plot(ts_data, type = "l", main = "Time Series Plot of Global Temperature Data", 
+ xlab = "Time (t)", ylab = "Temperature (xt)")
+# Part (b): 
+ma5 <- stats::filter(x, rep(1/5, 5), sides = 2)
+plot(ts_data, type = "l", col = "gray", main = "Time Series with Order 5 Moving Average", 
+ xlab = "Time (t)", ylab = "Temperature")
+lines(ma5, col = "red", lwd = 2)
+legend("topleft", legend = c("Original Series", "MA (order 5)"), col = c("gray", "red"), lty = 1)
+# Part (c): 
+# Part (c): 
+model <- lm(x ~ t)
+a_hat <- coef(model)[1]
+b_hat <- coef(model)[2]
+cat("Estimated intercept (a_hat):", a_hat, "\n")
+cat("Estimated slope (b_hat):", b_hat, "\n")
+# Computing fitted trend values (m_hat)
+plot(ts_data, type = "l", main = "Time Series Plot of Global Temperature with Linear Trend",xlab = "Time (t)", ylab = 
+"Temperature (xt)")
+abline(model)
+# Part (d): 
+residuals_x <- residuals(model)
+plot(t, residuals_x, type = "b", main = "Residual Plot", 
+ xlab = "Time (t)", ylab = "Residuals (et)")
+abline(h = 0, col = "blue", lty = 2)
+# Part (e): 
+future_t <- data.frame(t = (length(x) + 1):(length(x) + 10))
+forecast_values <- predict(model, newdata = future_t)
+print("Forecast values for the next 10 time points:")
