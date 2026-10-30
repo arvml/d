@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <math.h>
+
+double f(double x)
+{
+    return x * x * x - 2 * x - 5;
+}
+
+int main()
+{
+    double a, b, c, tol;
+    int i = 0;
+
+    printf("Enter interval [a, b]: ");
+    scanf("%lf %lf", &a, &b);
+
+    printf("Enter tolerance: ");
+    scanf("%lf", &tol);
+
+    if (f(a) * f(b) > 0) {
+        printf("Root not bracketed: f(a) and f(b) need opposite signs.\n");
+        return 0;
+    }
+
+    printf("\nIter        a          b          c        f(c)\n");
+
+    do {
+        c = (a + b) / 2;
+        i++;
+
+        printf("%4d %10.5f %10.5f %10.5f %12.6f\n", i, a, b, c, f(c));
+
+        if (f(a) * f(c) < 0)
+            b = c;
+        else
+            a = c;
+
+    } while (fabs(b - a) > tol);
+
+    printf("\nRoot = %.5f (found in %d iterations)\n", (a + b) / 2, i);
+
+    return 0;
+}
