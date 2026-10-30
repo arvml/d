@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <math.h>
+
+double f(double x)
+{
+    return cos(x) - x;
+}
+
+double df(double x)
+{
+    return -sin(x) - 1;
+}
+
+int main()
+{
+    double x0, x1, tol;
+    int i = 0;
+
+    printf("Enter initial guess: ");
+    scanf("%lf", &x0);
+
+    printf("Enter tolerance: ");
+    scanf("%lf", &tol);
+
+    printf("\nIter        x          f(x)\n");
+
+    do {
+        x1 = x0 - f(x0) / df(x0);
+        i++;
+
+        printf("%4d %10.6f %12.8f\n", i, x1, f(x1));
+
+        if (fabs(x1 - x0) < tol)
+            break;
+
+        x0 = x1;
+
+    } while (i < 50);
+
+    printf("\nRoot = %.6f (found in %d iterations)\n", x1, i);
+
+    return 0;
+}
